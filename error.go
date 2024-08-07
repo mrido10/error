@@ -1,6 +1,10 @@
-package errs
+package errz
 
-import "errors"
+import (
+	"errors"
+	"net/http"
+	"strings"
+)
 
 type Error struct {
 	err        error
@@ -18,6 +22,54 @@ func New(msg string, statusCode int, err ...error) *Error {
 		message:    msg,
 		err:        er,
 	}
+}
+
+func BadRequest(message ...string) *Error {
+	code := http.StatusBadRequest
+	return New(setErrorMessage(code, message...), code)
+}
+
+func Unauthorized(message ...string) *Error {
+	code := http.StatusUnauthorized
+	return New(setErrorMessage(code, message...), code)
+}
+
+func Forbiden(message ...string) *Error {
+	code := http.StatusForbidden
+	return New(setErrorMessage(code, message...), code)
+}
+
+func NotFound(message ...string) *Error {
+	code := http.StatusNotFound
+	return New(setErrorMessage(code, message...), code)
+}
+
+func MethodNotAllowed(message ...string) *Error {
+	code := http.StatusMethodNotAllowed
+	return New(setErrorMessage(code, message...), code)
+}
+
+func RequestTimeout(message ...string) *Error {
+	code := http.StatusRequestTimeout
+	return New(setErrorMessage(code, message...), code)
+}
+
+func InternalServerErrorBadRequest(message ...string) *Error {
+	code := http.StatusInternalServerError
+	return New(setErrorMessage(code, message...), code)
+}
+
+func GatewayTimeout(message ...string) *Error {
+	code := http.StatusGatewayTimeout
+	return New(setErrorMessage(code, message...), code)
+}
+
+func setErrorMessage(code int, message ...string) string {
+	msg := strings.Join(message, " ")
+	if strings.TrimSpace(msg) == "" {
+		msg = http.StatusText(code)
+	}
+	return msg
 }
 
 func (e *Error) Error() string {
