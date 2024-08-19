@@ -54,7 +54,7 @@ func RequestTimeout(message ...string) *Error {
 	return New(setErrorMessage(code, message...), code)
 }
 
-func InternalServerErrorBadRequest(message ...string) *Error {
+func InternalServerError(message ...string) *Error {
 	code := http.StatusInternalServerError
 	return New(setErrorMessage(code, message...), code)
 }
